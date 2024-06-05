@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/cadastro-login.css">
+    <script src="js/sessao.js"></script>
+    <link rel="shortcut icon" href="imagem/icon-logo.png" type="image/x-icon" style="width: 100%;">
+    <title>Document</title>
+</head>
+<body>
+    <div class="navbar">
+        <ul class="ul">
+            <li><a href="index.html"><img src="imagem/logo-imagem-semfundo.png" alt=""><img src="imagem/logo-texto-branco-semfundo.png" alt=""></a></li>
+
+            <li><a href="index.html#quemSomos">Quem somos?</a></li>
+
+            <li><a href="index.html#comoUsar">Como usar?</a></li>
+
+            <li><a href="index.html#informe">Informe-se</a></li>
+
+            <li><a href="index.html#inspira">Inspiração</a></li>
+
+            <li><a href="index.html#contato">Contato</a></li>
+
+            <li><a href="cadastro_login.html"><button>Cadastre-se</button></a></li>
+        </ul>
+    </div>
+
+    <div class="fundo-cadastro">
+        <div class="form">
+            <div class="bloco">
+                <button id="btn_cadastro" class="btn-trocar-form active" onclick="trocarForm('cadastro')">Cadastro</button>
+                <button id="btn_login" class="btn-trocar-form" onclick="trocarForm('login')">Login</button>
+            </div>
+
+            <div id="div_trocar_form" class="divisao"> 
+                <div class="bloco">
+                    <h1>Seja Bem Vindo ao ORION 👽</h1>
+                </div>
+                <div class="bloco">
+                    <select class="form-input" name="" id="selectTipoUsuario" onchange="habilitarform()">
+                        <option disabled selected value="">Sou...</option>
+                        <option value="paciente">Paciente</option>
+                        <option value="familiar">Familiar</option>
+                    </select>
+                    <input type="text" class="form-input" placeholder="Nome..." id="input_nome">
+                </div>
+
+                    <div class="bloco">
+                        <input type="text" class="form-input" placeholder="Email..." id="input_email">
+                        <input type="password" class="form-input" placeholder="Senha..." id="input_senha">
+                    </div>
+
+                    <div id="familiar" class="bloco">
+                        <select class="form-input" name="" id="select_parentesco">
+                            <option disabled selected value="">Grau de Parentesco...</option>
+                            <option value="Mãe">Mãe</option>
+                            <option value="Pai">Pai</option>
+                            <option value="Esposo(a)">Esposo(a)</option>
+                            <option value="Filho(a)">Filho(a)</option>
+                            <option value="Irmão(a)">Irmão(a)</option>
+                        </select>
+                        <input type="password" class="form-input" placeholder="Codigo Paciente..." id="input_codigo_paciente">
+                    </div>
+
+                    <div id="paciente" class="bloco">
+                        <select class="form-input" name="" id="select_tipo_cancer">
+                            <option disabled selected value="">Tipo Cancêr...</option>
+                            <option value="pele não melanoma">pele não melanoma</option>
+                            <option value="mama feminina">mama feminina</option>
+                            <option value="próstata">próstata</option>
+                            <option value="cólon e reto">cólon e reto</option>
+                            <option value="pulmão">pulmão</option>
+                            <option value="estômago">estômago</option>
+                            <option value="colo do útero">colo do útero</option>
+                        </select>
+                        <input type="date" class="form-input" placeholder="Data de Nascimento..." id="input_data_nasc">
+                    </div>
+
+                    <div class="bloco">
+                        <button class="btn-cadastro-login" onclick="cadastrar()">Cadastrar</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    function habilitarform(){
+        const tipoUsuario = selectTipoUsuario.value;
+        var familiar = document.getElementById('familiar');
+        var paciente = document.getElementById('paciente');
+        
+
+        if(tipoUsuario == 'familiar'){
+            paciente.style.display = 'none';
+            familiar.style.display = 'flex';
+        }else{
+            familiar.style.display = 'none';
+            paciente.style.display = 'flex'; 
+        }
+    }
+
+    function trocarForm(mudarpara){
+        const cadastro = document.getElementById('btn_cadastro');
+            const login = document.getElementById('btn_login');
+
+            if (mudarpara === 'cadastro') {
+                cadastro.classList.add('active');
+                login.classList.remove('active');
+                
+                div_trocar_form.innerHTML = `
+                <div class="bloco">
+                    <h1>Seja Bem Vindo ao ORION 👽</h1>
+                </div>
+                <div class="bloco">
+                    <select class="form-input" name="" id="selectTipoUsuario" onchange="habilitarform()">
+                        <option disabled selected value="">Sou...</option>
+                        <option value="paciente">Paciente</option>
+                        <option value="familiar">Familiar</option>
+                    </select>
+                    <input type="text" class="form-input" placeholder="Nome..." id="input_nome">
+                </div>
+
+                    <div class="bloco">
+                        <input type="text" class="form-input" placeholder="Email..." id="input_email">
+                        <input type="password" class="form-input" placeholder="Senha..." id="input_senha">
+                    </div>
+
+                    <div id="familiar" class="bloco">
+                        <select class="form-input" name="" id="select_parentesco">
+                            <option disabled selected value="">Grau de Parentesco...</option>
+                            <option value="">Mãe</option>
+                            <option value="">Pai</option>
+                            <option value="">Esposo(a)</option>
+                            <option value="">Filho(a)</option>
+                            <option value="">Irmão(a)</option>
+                        </select>
+                        <input type="password" class="form-input" placeholder="Codigo Paciente..." id="input_codigo_paciente">
+                    </div>
+
+                    <div id="paciente" class="bloco">
+                        <select class="form-input" name="" id="select_tipo_cancer">
+                            <option disabled selected value="">Tipo Cancêr...</option>
+                            <option value="">pele não melanoma</option>
+                            <option value="">mama feminina</option>
+                            <option value="">próstata</option>
+                            <option value="">cólon e reto</option>
+                            <option value="">pulmão</option>
+                            <option value="">estômago</option>
+                            <option value="">colo do útero</option>
+                        </select>
+                        <input type="date" class="form-input" placeholder="Data de Nascimento..." id="input_data_nasc">
+                    </div>
+
+                    <div class="bloco">
+                        <button class="btn-cadastro-login" onclick="cadastrar()">Cadastrar</button>
+                    </div>`;
+            } else{
+                login.classList.add('active');
+                cadastro.classList.remove('active');
+
+                div_trocar_form.innerHTML = `
+                <h1>Seja Bem Vindo de Volta 👽</h1>
+                <input type="text" class="form-input" placeholder="Email..." id="input_email">
+                <input type="password" class="form-input" placeholder="Senha..." id="input_senha">
+                <button class="btn-cadastro-login" onclick="entrar()">Entrar</button>`;
+            }
+    }
+
+    function cadastrar(){
+        const tipoUsuario = selectTipoUsuario.value;
+        var nomeVar = input_nome.value;
+        var emailVar = input_email.value;
+        var senhaVar = input_senha.value;
+
+        if(tipoUsuario == 'paciente'){
+            var dataNascVar = input_data_nasc.value;
+            var tipoCancerVar = select_tipo_cancer.value; 
+
+            fetch("/usuarios/cadastrarPaciente", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                nomeServer: nomeVar,
+                emailServer: emailVar,
+                senhaServer: senhaVar,
+                dataNascServer: dataNascVar,
+                tipoCancerServer: tipoCancerVar
+            }),
+            })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+
+                    alert(`Cadastro realizado com sucesso!`);
+
+                setTimeout(() => {
+                    trocarForm('login');
+                }, "20");
+
+                } else {
+                throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+            return false;
+
+        }else{
+            var parentescoVar = select_parentesco.value;
+            var codigoPacienteVar = input_codigo_paciente.value;
+
+            fetch("/usuarios/cadastrarFamiliar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                nomeServer: nomeVar,
+                emailServer: emailVar,
+                senhaServer: senhaVar,
+                parentescoServer: parentescoVar,
+                codigoPacienteServer: codigoPacienteVar
+            }),
+            })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+
+                    alert(`Cadastro realizado com sucesso!`);
+
+                setTimeout(() => {
+                    trocarForm('login');
+                }, "20");
+
+                } else {
+                throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+            return false;
+        }
+    }
+
+    function entrar(){
+        var emailVar = input_email.value;
+        var senhaVar = input_senha.value;
+
+        
+        console.log("FORM LOGIN: ", emailVar);
+        console.log("FORM SENHA: ", senhaVar);
+
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: emailVar,
+                senhaServer: senhaVar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+                    
+                    if(json.parentesco == undefined){
+                        sessionStorage.EMAIL_USUARIO = json.email;
+                        sessionStorage.NOME_USUARIO = json.nome;
+                        sessionStorage.ID_PACIENTE = json.id;
+                        sessionStorage.TIPO_CANCER = json.tipoCancer;
+                        sessionStorage.DATANASC_PACIENTE = json.dataNasc;
+                        sessionStorage.DATAS_CONSULTAS = JSON.stringify(json.datasConsultas)
+                    }else{
+                        sessionStorage.EMAIL_USUARIO = json.email;
+                        sessionStorage.NOME_USUARIO = json.nome;
+                        sessionStorage.ID_FAMILIAR = json.id;
+                        sessionStorage.PARENTESCO = json.parentesco;
+                        sessionStorage.ID_PACIENTE = json.idPaciente;
+                        sessionStorage.DATAS_CONSULTAS = JSON.stringify(json.datasConsultas)
+                    }
+
+                    setTimeout(function () {
+                        window.location = "./dashboard/cadastro_consulta.html";
+                    }, 20); // apenas para exibir o loading
+
+                });
+
+            } else {
+
+                console.log("Houve um erro ao tentar realizar o login!");
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+    }
+</script>

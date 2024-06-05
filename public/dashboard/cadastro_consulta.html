@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/sessao.js"></script>
+    <link rel="stylesheet" href="../css/dash_navbar.css">
+    <link rel="shortcut icon" href="../imagem/icon-logo.png" type="image/x-icon" style="width: 100%;">
+    <title>ORION</title>
+</head>
+<body onload="validarSessao()">
+    <div class="container">
+        <nav class="sidebar close">
+            <header>
+                <div class="image-text">
+                    <span class="image">
+                        <img src="../imagem/luana foto sptech.png" alt="">
+                    </span>
+
+                    <div class="text header-tex">
+                        <span class="name" id="name">CodingLab</span><br>
+                        <span class="profession">Web Developer</span>
+                    </div>
+
+                    <ion-icon class="toggle" name="chevron-forward-outline"></ion-icon>
+
+                </div>
+            </header>
+
+            <div class="menu-bar">
+                <div class="menu">
+                    <ul class="menu-links">
+                        <li class="nav-link">
+                            <a href="dash.html">
+                                <ion-icon name="home-outline"></ion-icon>
+                                <span class="text nav-text">Home</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="cadastro_consulta.html">
+                                <ion-icon name="fitness-outline"></ion-icon>
+                                <span class="text nav-text">Consultas</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="grafico.html">
+                                <ion-icon name="bar-chart-outline"></ion-icon>
+                                <span class="text nav-text">Gráfico</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="orionIA.html">
+                                <ion-icon name="help-circle-outline"></ion-icon>
+                                <span class="text nav-text">Ajuda</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link" id="page_familiar">
+                            <!-- <a href="cadastro_consulta.html">
+                                <ion-icon name="fitness-outline"></ion-icon>
+                                <span class="text nav-text">Consultas</span>
+                            </a> -->
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bottom-content">
+                    <li class="">
+                        <a onclick="limparSessao()">
+                            <ion-icon name="log-out-outline"></ion-icon>
+                            <span class="text nav-text">Sair</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="moon-sun">
+                            <ion-icon class="moon" name="moon-outline"></ion-icon>
+                            <ion-icon class="sun" name="sunny-outline"></ion-icon> 
+                        </div>
+                        <span class="mode-text text">Modo Escuro</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </nav>
+
+        <div class="estrutura" id="estrutura">
+            <div class="form-container consulta">
+                <div class="form">
+                    <h1 class="titulo">Cadastre sua Consulta!</h1>
+
+                    <div>
+                        <input type="text" placeholder="descrição consulta..." id="input_desc_consulta">
+                        <input type="datetime-local" placeholder="hora..." id="input_dataHora">
+                    </div>
+                    
+                    <div>
+                        <input type="text" placeholder="cep.." id="input_cep">
+                        <input type="text" placeholder="número..." id="input_numero">
+                    </div>
+
+                    <div>
+                        <input type="text" placeholder="logradouro.." id="input_logradouro">
+                        <input type="text" placeholder="bairro..." id="input_bairro">
+                    </div>
+
+                    <button onclick="cadastrarConsulta()">Cadastrar</button>
+                </div>
+            </div>
+
+            <div class="form-container medicacao">
+                <div class="form">
+                    <h1 class="titulo">Cadastre sua Medicação!</h1>
+
+                        <input type="time" placeholder="hora..." id="input_hora">
+             
+                        <input type="text" placeholder="descrição.." id="input_desc">
+
+                        <input type="number" placeholder="quantidade medicação.." id="input_qtd">
+
+                    <button onclick="cadastrarRemedio()">Cadastrar</button>
+                </div>
+            </div>
+
+            <div class="estrutura-painel">
+                <div class="painel">
+                    <div class="painel-mudar esquerdo">
+                        <h1>Cadastre Consultas!</h1>
+                        <p>Aqui Você pode cadastrar suas consultas que te enviaremos alertas um dia antes delas!</p>
+                        <button class="btn-acessar" id="medicacao">
+                            Acessar
+                        </button>
+                    </div>
+
+                    <div class="painel-mudar direito">
+                        <h1>Cadastre Medicações!</h1>
+                        <p>Aqui Você pode cadastrar suas medicações que te enviaremos alertas para toma-lás!</p>
+                        <button class="btn-acessar" id="consulta">
+                            Acessar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+           
+    </div>
+    <script src="../js/nav_dash.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>    
+</body>
+</html>
+<script>
+    function cadastrarConsulta(){
+
+        var descVar = input_desc_consulta.value;
+        var dataHoraVar = input_dataHora.value;
+        var cepVar = input_cep.value;
+        var numeroVar = input_numero.value;
+        var logradouroVar = input_logradouro.value;
+        var bairroVar = input_bairro.value;
+        var idVar = sessionStorage.ID_PACIENTE;
+
+        fetch("/consulta/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                descServer: descVar,
+                dataHoraServer: dataHoraVar,
+                cepServer: cepVar,
+                numeroServer: numeroVar,
+                logradouroServer: logradouroVar,
+                bairroServer: bairroVar,
+                idServer: idVar
+            }),
+            })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+
+                    alert(`Cadastro realizado com sucesso!`);
+
+                } else {
+                throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+            return false;
+
+    }
+    function cadastrarRemedio(){
+        var horaVar = input_hora.value;
+        var descVar = input_desc.value;
+        var qtdVar = input_qtd.value;
+        var idVar = sessionStorage.ID_PACIENTE;
+
+        fetch("/medicacao/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                descServer: descVar,
+                horaServer: horaVar,
+                qtdServer: qtdVar,
+                idServer: idVar
+            }),
+            })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+
+                    alert(`Cadastro realizado com sucesso!`);
+
+                } else {
+                throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+            return false;
+    }
+</script>

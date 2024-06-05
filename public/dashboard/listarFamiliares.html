@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/sessao.js"></script>
+    <link rel="stylesheet" href="../css/dash_navbar.css">
+    <link rel="shortcut icon" href="../imagem/icon-logo.png" type="image/x-icon" style="width: 100%;">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Importando o plugin DataLabels do ChartJS: -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <title>ORION</title>
+</head>
+<body onload="validarSessao(), listarFamiliar()">
+    <div class="container">
+        <nav class="sidebar close">
+            <header>
+                <div class="image-text">
+                    <span class="image">
+                        <img src="../imagem/luana foto sptech.png" alt="">
+                    </span>
+
+                    <div class="text header-tex">
+                        <span class="name" id="name">CodingLab</span><br>
+                        <span class="profession">Web Developer</span>
+                    </div>
+
+                    <ion-icon class="toggle" name="chevron-forward-outline"></ion-icon>
+
+                </div>
+            </header>
+
+            <div class="menu-bar">
+                <div class="menu">
+                    <ul class="menu-links">
+                        <li class="nav-link">
+                            <a href="dash.html">
+                                <ion-icon name="home-outline"></ion-icon>
+                                <span class="text nav-text">Home</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="cadastro_consulta.html">
+                                <ion-icon name="fitness-outline"></ion-icon>
+                                <span class="text nav-text">Consultas</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="grafico.html">
+                                <ion-icon name="bar-chart-outline"></ion-icon>
+                                <span class="text nav-text">Gráfico</span>
+                            </a>
+                        </li>
+
+                        
+
+                        <li class="nav-link">
+                            <a href="orionIA.html">
+                                <ion-icon name="help-circle-outline"></ion-icon>
+                                <span class="text nav-text">Ajuda</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link" id="page_familiar">
+                            <!-- <a href="cadastro_consulta.html">
+                                <ion-icon name="fitness-outline"></ion-icon>
+                                <span class="text nav-text">Consultas</span>
+                            </a> -->
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bottom-content">
+                    <li class="">
+                        <a onclick="limparSessao()">
+                            <ion-icon name="log-out-outline"></ion-icon>
+                            <span class="text nav-text">Sair</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="moon-sun">
+                            <ion-icon class="moon" name="moon-outline"></ion-icon>
+                            <ion-icon class="sun" name="sunny-outline"></ion-icon> 
+                        </div>
+                        <span class="mode-text text">Modo Escuro</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </nav>
+
+        <div class="estrutura"  id="exibir_familiar">
+            
+            <div class="painel-fixo">
+                <h1 class="titulo-fixo">Meus Familiares</h1>
+                <hr>
+            </div>
+            
+        </div>
+
+           
+    </div>
+    
+    <script src="../js/nav_dash.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script> 
+    
+</body>
+</html>
+<script>
+    function listarFamiliar(){
+        fetch("/usuarios/BuscarFamiliares", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            // crie um atributo que recebe o valor recuperado aqui
+                            // Agora vá para o arquivo routes/usuario.js'
+                            id: sessionStorage.ID_PACIENTE
+                        }),
+                        })
+                        .then(resposta => resposta.json()) // Extrai e analisa o corpo JSON da resposta
+                        .then(familiar => {
+                            // console.log("resposta: ", resposta);
+
+                            familiar.forEach(item => {
+                                exibir_familiar.innerHTML += `
+                                <div class="exibir-familiar">
+                                    <img src="../imagem/luana foto sptech.png" alt="">
+                                    <p>${item.nomeFamiliar}</p>
+                                    <p>${item.parentesco}</p>
+                                    <p>${item.emailFamiliar}</p>  
+                                </div>
+                                <hr>
+                                `;
+                            });
+                        })
+                        .catch(error => console.error('#ERRO:', error));
+
+                        return false;
+    }
+</script>

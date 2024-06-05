@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/sessao.js"></script>
+    <link rel="stylesheet" href="../css/dash_navbar.css">
+    <link rel="shortcut icon" href="../imagem/icon-logo.png" type="image/x-icon" style="width: 100%;">
+    <title>ORION</title>
+</head>
+<body onload="validarSessao(), exibirDatas(), listarMedicacao()">
+    <div class="container">
+        <nav class="sidebar close">
+            <header>
+                <div class="image-text">
+                    <span class="image">
+                        <img src="../imagem/luana foto sptech.png" alt="">
+                    </span>
+
+                    <div class="text header-tex">
+                        <span class="name" id="name">CodingLab</span><br>
+                        <span class="profession">Web Developer</span>
+                    </div>
+
+                    <ion-icon class="toggle" name="chevron-forward-outline"></ion-icon>
+
+                </div>
+            </header>
+
+            <div class="menu-bar">
+                <div class="menu">
+                    <ul class="menu-links">
+                        <li class="nav-link">
+                            <a href="dash.html">
+                                <ion-icon name="home-outline"></ion-icon>
+                                <span class="text nav-text">Home</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="cadastro_consulta.html">
+                                <ion-icon name="fitness-outline"></ion-icon>
+                                <span class="text nav-text">Consultas</span>
+                            </a>
+                        </li>
+
+                        <!-- <li class="nav-link">
+                            <a href="">
+                                <ion-icon name="person-add-outline"></ion-icon>
+                                <span class="text nav-text">Configurações</span>
+                            </a>
+                        </li> -->
+
+                        <li class="nav-link">
+                            <a href="grafico.html">
+                                <ion-icon name="bar-chart-outline"></ion-icon>
+                                <span class="text nav-text">Gráfico</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="orionIA.html">
+                                <ion-icon name="help-circle-outline"></ion-icon>
+                                <span class="text nav-text">Ajuda</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link" id="page_familiar">
+                            <!-- <a href="cadastro_consulta.html">
+                                <ion-icon name="fitness-outline"></ion-icon>
+                                <span class="text nav-text">Consultas</span>
+                            </a> -->
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bottom-content">
+                    <li class="">
+                        <a onclick="limparSessao()">
+                            <ion-icon name="log-out-outline"></ion-icon>
+                            <span class="text nav-text">Sair</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="moon-sun">
+                            <ion-icon class="moon" name="moon-outline"></ion-icon>
+                            <ion-icon class="sun" name="sunny-outline"></ion-icon> 
+                        </div>
+                        <span class="mode-text text">Modo Escuro</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </nav>
+
+        <div class="estrutura dash">
+            <div class="centro">
+
+                <div class="lista-dias" id="dia">
+                    
+                </div>
+    
+                <div class="divisoria">
+                    <p id="divisoria"> </p>
+                    <hr>
+                </div>
+    
+                <div class="estrutura-listar-consulta">
+                        
+    
+                    <div class="listar-consulta" id="listar_consulta">
+                        
+                    </div>
+    
+                </div>
+    
+            </div>
+    
+            <div class="painel-medicacao" id="painel_medicacao">
+                <div class="exibir-medicacao">
+                    <h1>Medicação do dia!</h1>
+                </div>
+    
+                
+        </div>
+
+           
+    </div>
+    <script src="../js/nav_dash.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script> 
+</body>
+</html>
+<script>
+    function exibirDatas() {
+        fetch("/consulta/BuscarDatas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js'
+                id: sessionStorage.ID_PACIENTE
+            }),
+            })
+            .then(function (response) {
+            if (response.ok) {
+                response.json().then(function (resposta) {
+                    console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+
+                    const datasConsultas = resposta;
+                    datasConsultas.forEach(item => {
+                        const dataConsulta = item.data_consulta;
+                        if (dataConsulta == datasConsultas[0].data_consulta) { 
+                            document.getElementById("dia").innerHTML += `
+                                <div class="dias active"   onclick="trocarDia('${dataConsulta}', this)">
+                                    <h1>${dataConsulta}</h1>
+                                </div>
+                            `;
+                            divisoria.innerHTML = `Dia ${dataConsulta}`;
+
+                            fetch("/consulta/BuscarConsultas", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            // crie um atributo que recebe o valor recuperado aqui
+                            // Agora vá para o arquivo routes/usuario.js'
+                            id: sessionStorage.ID_PACIENTE,
+                            data: dataConsulta
+                        }),
+                        })
+                        .then(resposta => resposta.json()) // Extrai e analisa o corpo JSON da resposta
+                        .then(data => {
+                            // console.log("resposta: ", resposta);
+
+                            data.forEach(item => {
+                                listar_consulta.innerHTML += `
+                                    <div class="card-consulta">
+                                        <h1>${item.descricaoConsulta}</h1>
+                                        <div>
+                                            <ion-icon name="alarm-outline"></ion-icon>
+                                            <p>${item.horaConsulta}</p>
+                                            <ion-icon name="car-sport-outline"></ion-icon>
+                                            <p>${item.cep}</p>
+                                        </div>
+                                        <div>
+                                            <ion-icon name="train-outline"></ion-icon>
+                                            <p>${item.logradouro}, ${item.numLogradouro} - ${item.bairro}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                        })
+                        .catch(error => console.error('#ERRO:', error));
+
+                        return false;
+
+                        } else {
+                            document.getElementById("dia").innerHTML += `
+                                <div class="dias"   onclick="trocarDia('${dataConsulta}', this)">
+                                    <h1>${dataConsulta}</h1>
+                                </div>
+                            `;
+                        }
+                    });
+
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+            })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+   
+       
+    
+}
+
+    function listarMedicacao(){
+            fetch("/medicacao/listar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                id: sessionStorage.ID_PACIENTE
+            }),
+            })
+            .then(resposta => resposta.json()) // Extrai e analisa o corpo JSON da resposta
+            .then(medicacao => {
+                // console.log("resposta: ", resposta);
+
+                medicacao.forEach(item => {
+                    painel_medicacao.innerHTML += `
+                    <div class="exibir-medicacao">
+                        <ion-icon name="bandage-outline"></ion-icon>
+                        <p id="desc_remedio">${item.descricaoMedicacao}</p>
+                        <p id="qtd_remedio">${item.quantidadeMedicacao}</p>
+                        <p id="hora_remedio">${item.horaMedicacao}</p>
+                    </div>
+                    `;
+                });
+            })
+            .catch(error => console.error('#ERRO:', error));
+
+            return false;
+    }
+
+    function trocarDia(data, elementoClicado){
+        listar_consulta.innerHTML = ``;
+
+        document.querySelectorAll('.dias').forEach(div => {
+            div.classList.remove('active');
+        });
+        
+        // Adiciona a classe 'active' à div clicada
+        elementoClicado.classList.add('active');
+
+        fetch("/consulta/BuscarConsultas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                id: sessionStorage.ID_PACIENTE,
+                data: data
+            }),
+            })
+            .then(resposta => resposta.json()) // Extrai e analisa o corpo JSON da resposta
+            .then(data => {
+                // console.log("resposta: ", resposta);
+
+                data.forEach(item => {
+                    listar_consulta.innerHTML += `
+                        <div class="card-consulta">
+                            <h1>${item.descricaoConsulta}</h1>
+                            <div>
+                                <ion-icon name="alarm-outline"></ion-icon>
+                                <p>${item.horaConsulta}</p>
+                                <ion-icon name="car-sport-outline"></ion-icon>
+                                <p>${item.cep}</p>
+                            </div>
+                            <div>
+                                <ion-icon name="train-outline"></ion-icon>
+                                <p>${item.logradouro}, ${item.numLogradouro} - ${item.bairro}</p>
+                            </div>
+                        </div>
+                    `;
+
+                    divisoria.innerHTML = `Dia ${item.data_consulta}`;
+                });
+            })
+            .catch(error => console.error('#ERRO:', error));
+    }
+
+</script>

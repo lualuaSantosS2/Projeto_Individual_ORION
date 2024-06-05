@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/sessao.js"></script>
+    <link rel="stylesheet" href="../css/dash_navbar.css">
+    <link rel="shortcut icon" href="../imagem/icon-logo.png" type="image/x-icon" style="width: 100%;">
+    <title>ORION</title>
+</head>
+<body onload="validarSessao()">
+    <div class="container">
+        <nav class="sidebar close">
+            <header>
+                <div class="image-text">
+                    <span class="image">
+                        <img src="../imagem/luana foto sptech.png" alt="">
+                    </span>
+
+                    <div class="text header-tex">
+                        <span class="name">CodingLab</span><br>
+                        <span class="profession">Web Developer</span>
+                    </div>
+
+                    <ion-icon class="toggle" name="chevron-forward-outline"></ion-icon>
+
+                </div>
+            </header>
+
+            <div class="menu-bar">
+                <div class="menu">
+                    <ul class="menu-links">
+                        <li class="nav-link">
+                            <a href="dash.html">
+                                <ion-icon name="home-outline"></ion-icon>
+                                <span class="text nav-text">Home</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="cadastro_consulta.html">
+                                <ion-icon name="fitness-outline"></ion-icon>
+                                <span class="text nav-text">Consultas</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="grafico.html">
+                                <ion-icon name="bar-chart-outline"></ion-icon>
+                                <span class="text nav-text">Gráfico</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="orionIA.html">
+                                <ion-icon name="help-circle-outline"></ion-icon>
+                                <span class="text nav-text">Ajuda</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bottom-content">
+                    <li class="">
+                        <a onclick="limparSessao()">
+                            <ion-icon name="log-out-outline"></ion-icon>
+                            <span class="text nav-text">Sair</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="moon-sun">
+                            <ion-icon class="moon" name="moon-outline"></ion-icon>
+                            <ion-icon class="sun" name="sunny-outline"></ion-icon> 
+                        </div>
+                        <span class="mode-text text">Modo Escuro</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </nav>
+
+        <div class="tipo-column">
+            <div class="form-pergunta-ia">
+                <h1>ORION IA</h1>
+                <span>Tire sua dúvida com nossa IA</span>
+                <input type="text" id="pergunta" placeholder="Escreva sua dúvida...">
+                <button onclick="gerarResposta()">Enviar</button>
+            </div>
+            <div class="resposta-ia">
+                <div>
+                    <img src="../imagem/mascote.jpg" alt="">
+                    <span>Orionho</span>
+                </div>
+                <div id="resposta" class="saida">
+                    
+                </div>
+                <div class="loader" id="loader">
+                    <li class="ball"></li>
+                    <li class="ball"></li>
+                    <li class="ball"></li>
+                  </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/nav_dash.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
+<script>
+    function loader( situacao){
+        const loader = document.getElementById('loader');
+        const pergunta = document.getElementById('resposta');
+
+        if(situacao == 'parar'){
+            loader.style.display ='none';
+        }else{
+            resposta.style.display = 'none';
+            loader.style.display ='flex';
+        }
+    }
+    async function gerarResposta() {
+
+        loader('começar');
+
+        const pergunta = document.getElementById('pergunta').value;
+
+        const response = await fetch('http://localhost:3333/perguntar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ pergunta })
+        });
+
+        const data = await response.json();
+        loader('parar');
+        resposta.style.display = 'block';
+        document.getElementById('resposta').innerText = data.resultado;
+    }
+</script>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/sessao.js"></script>
+    <link rel="stylesheet" href="../css/dash_navbar.css">
+    <link rel="shortcut icon" href="../imagem/icon-logo.png" type="image/x-icon" style="width: 100%;">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Importando o plugin DataLabels do ChartJS: -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <title>ORION</title>
+</head>
+<body  onload="validarSessao(), obterDadosGrafico()">
+    <!-- onload="validarSessao()" -->
+    <div class="container">
+        <nav class="sidebar close">
+            <header>
+                <div class="image-text">
+                    <span class="image">
+                        <img src="../imagem/luana foto sptech.png" alt="">
+                    </span>
+
+                    <div class="text header-tex">
+                        <span class="name" id="name">CodingLab</span><br>
+                        <span class="profession">Web Developer</span>
+                    </div>
+
+                    <ion-icon class="toggle" name="chevron-forward-outline"></ion-icon>
+
+                </div>
+            </header>
+
+            <div class="menu-bar">
+                <div class="menu">
+                    <ul class="menu-links">
+                        <li class="nav-link">
+                            <a href="dash.html">
+                                <ion-icon name="home-outline"></ion-icon>
+                                <span class="text nav-text">Home</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="cadastro_consulta.html">
+                                <ion-icon name="fitness-outline"></ion-icon>
+                                <span class="text nav-text">Consultas</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="grafico.html">
+                                <ion-icon name="bar-chart-outline"></ion-icon>
+                                <span class="text nav-text">Gráfico</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="orionIA.html">
+                                <ion-icon name="help-circle-outline"></ion-icon>
+                                <span class="text nav-text">Ajuda</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link" id="page_familiar">
+                            <!-- <a href="cadastro_consulta.html">
+                                <ion-icon name="fitness-outline"></ion-icon>
+                                <span class="text nav-text">Consultas</span>
+                            </a> -->
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bottom-content">
+                    <li class="">
+                        <a onclick="limparSessao()">
+                            <ion-icon name="log-out-outline"></ion-icon>
+                            <span class="text nav-text">Sair</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="moon-sun">
+                            <ion-icon class="moon" name="moon-outline"></ion-icon>
+                            <ion-icon class="sun" name="sunny-outline"></ion-icon> 
+                        </div>
+                        <span class="mode-text text">Modo Escuro</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </nav>
+
+        <div class="estrutura dash">
+            <div class="centro">
+
+                <div class="lista-dias">
+                    <h1 class="titulo-grafico">Quantidades de consultas no mês</h1>
+                </div>
+
+                <div class="estrutura-listar-consulta">
+                        
+    
+                    <div class="listar-consulta">
+                        <div class="grafico">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+    
+                </div>
+    
+            </div>
+    
+            <div class="painel-medicacao" id="painel_calc">
+                <div class="exibir-titulo">
+                    <h1>Calcule gastos Possiveís!</h1>
+                    <p>Quanto você gasta em média quando vai a uma consulta?</p>
+                    <input type="text" placeholder="0.00" id="input_valor" onkeyup="calcular()">
+                </div>
+
+                <div class="exibir-titulo" id="exibir_resultado">  
+                    
+                </div>
+         
+        </div>
+
+           
+    </div>
+    
+    <script src="../js/nav_dash.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script> 
+    <script>
+         let proximaAtualizacao;
+         const meses = [];
+         const quantidadeConsulta = [];
+
+        function obterDadosGrafico() {
+
+            if (proximaAtualizacao != undefined) {
+                clearTimeout(proximaAtualizacao);
+            }
+
+            fetch("/consulta/BuscarDados", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js'
+                id: sessionStorage.ID_PACIENTE
+            }),
+            })
+            .then(function (response) {
+            if (response.ok) {
+                response.json().then(function (resposta) {
+                    console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+                    resposta.reverse();
+
+                    plotarGrafico(resposta);
+
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+            })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+        }
+
+
+        function plotarGrafico(resposta) {
+
+            console.log('iniciando plotagem do gráfico...');
+
+            // Criando estrutura para plotar gráfico - labels
+            labels = [];
+            let dados = [];
+
+            // Criando estrutura para plotar gráfico - dados
+             dados = {
+                labels: labels,
+                datasets: [{
+                    label: 'Quantidade consultas no mês',
+                    data: [],
+                    fill: false,
+                    backgroundColor:  [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(201, 203, 207, 0.2)'
+                    ],
+                    borderColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)',
+                    'rgb(153, 102, 255)',
+                    'rgb(201, 203, 207)'
+                    ],
+                    tension: 0.1, 
+                    fontSize: '30px'
+                }]
+            };
+
+            console.log('----------------------------------------------')
+            console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
+            console.log(resposta)
+
+            // Inserindo valores recebidos em estrutura para plotar o gráfico
+            // resposta.sort((inicio, fim) => fim.resposta - inicio.resposta);
+            for (i = 0; i < resposta.length; i++) {
+                var registro = resposta[i];
+                labels.push(registro.mesConsulta);
+                dados.datasets[0].data.push(registro.quantidadeConsulta);
+
+                meses.push(registro.mesConsulta);
+                quantidadeConsulta.push(registro.quantidadeConsulta);
+            }
+
+            console.log('----------------------------------------------')
+            console.log('O gráfico será plotado com os respectivos valores:')
+            console.log('Labels:')
+            console.log(labels)
+            console.log('Dados:')
+            console.log(dados.datasets)
+            console.log('----------------------------------------------')
+
+            // Criando estrutura para plotar gráfico - config
+            const config = {
+                type: 'bar',
+                data: dados,
+                options: {
+                    scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                    }
+                },
+                };
+
+            // Adicionando gráfico criado em div na tela
+            let myChart = new Chart(
+                document.getElementById(`myChart`),
+                config
+            );
+
+            myChart.update();
+
+            // setTimeout(() => atualizarGrafico(dados, myChart), 2000);
+            }
+
+
+            function calcular(){
+                const valor = input_valor.value;
+
+                for(let sentinela = 0; sentinela < meses.length; sentinela ++){
+                    const valor = input_valor.value;
+
+                    exibir_resultado.innerHTML = `<p>Baseado na quantidade de consultas<br>
+                                                     Você pode chegar a gastar...</p>`;
+
+                    for(let sentinela = 0; sentinela < meses.length; sentinela ++){
+                        exibir_resultado.innerHTML += `
+                        <p>${meses[sentinela]}: ${(valor * quantidadeConsulta[sentinela]).toLocaleString('pt-BR', {
+                                                        style: 'currency',
+                                                        currency: 'BRL',
+                                                        minimumFractionDigits: 2,
+                                                        maximumFractionDigits: 2, 
+                                                        })
+                                                        }</p>
+                        `;
+                    }
+                }
+            }
+  
+        
+      </script>
+</body>
+</html>
