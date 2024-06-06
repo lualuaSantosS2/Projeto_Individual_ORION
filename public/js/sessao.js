@@ -5,6 +5,7 @@ function validarSessao() {
 
     var b_usuario = document.getElementById("name");
     var item = document.getElementById("page_familiar");
+    var people = document.getElementById("profession");
 
     if (email != null && nome != null) {
         b_usuario.innerHTML = nome;
@@ -15,6 +16,10 @@ function validarSessao() {
                                 <ion-icon name="people-outline"></ion-icon>
                                 <span class="text nav-text">Familiares</span>
                             </a>`;
+
+            people.innerHTML = `Codigo Paciente:${sessionStorage.ID_PACIENTE}`;
+        }else{
+            people.innerHTML = ` ${sessionStorage.PARENTESCO}`; 
         }
     } else {
         window.location = "../cadastro_login.html";
