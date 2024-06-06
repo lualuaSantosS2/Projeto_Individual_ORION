@@ -122,7 +122,7 @@
              
                         <input type="text" placeholder="descrição.." id="input_desc">
 
-                        <input type="number" placeholder="quantidade medicação.." id="input_qtd">
+                        <input type="text" placeholder="quantidade medicação.." id="input_qtd">
 
                     <button onclick="cadastrarRemedio()">Cadastrar</button>
                 </div>
@@ -167,7 +167,16 @@
         var bairroVar = input_bairro.value;
         var idVar = sessionStorage.ID_PACIENTE;
 
-        fetch("/consulta/cadastrar", {
+        if(descVar != '' &&
+            dataHoraVar != '' &&
+            cepVar != '' &&
+            numeroVar != '' &&
+            logradouroVar != '' &&
+            bairroVar != '' &&
+            idVar != '' 
+        ){
+
+            fetch("/consulta/cadastrar", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -201,6 +210,12 @@
 
             return false;
 
+
+        }else{
+            alert('todos os campos devem ser preenchidos!');
+        }
+
+       
     }
     function cadastrarRemedio(){
         var horaVar = input_hora.value;
@@ -208,7 +223,13 @@
         var qtdVar = input_qtd.value;
         var idVar = sessionStorage.ID_PACIENTE;
 
-        fetch("/medicacao/cadastrar", {
+        if(horaVar != '' &&
+            descVar != '' &&
+            qtdVar != '' &&
+            idVar != ''
+        ){
+
+            fetch("/medicacao/cadastrar", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -238,5 +259,11 @@
             });
 
             return false;
+
+        }else{
+            alert('todos os campos devem ser preenchidos!');
+        }
+
+       
     }
 </script>
