@@ -129,11 +129,11 @@
                     <div id="familiar" class="bloco">
                         <select class="form-input" name="" id="select_parentesco">
                             <option disabled selected value="">Grau de Parentesco...</option>
-                            <option value="">Mãe</option>
-                            <option value="">Pai</option>
-                            <option value="">Esposo(a)</option>
-                            <option value="">Filho(a)</option>
-                            <option value="">Irmão(a)</option>
+                            <option value="Mãe">Mãe</option>
+                            <option value="Pai">Pai</option>
+                            <option value="Esposo(a)">Esposo(a)</option>
+                            <option value="Filho(a)">Filho(a)</option>
+                            <option value="Irmão(a)">Irmão(a)</option>
                         </select>
                         <input type="password" class="form-input" placeholder="Codigo Paciente..." id="input_codigo_paciente">
                     </div>
@@ -141,13 +141,13 @@
                     <div id="paciente" class="bloco">
                         <select class="form-input" name="" id="select_tipo_cancer">
                             <option disabled selected value="">Tipo Cancêr...</option>
-                            <option value="">pele não melanoma</option>
-                            <option value="">mama feminina</option>
-                            <option value="">próstata</option>
-                            <option value="">cólon e reto</option>
-                            <option value="">pulmão</option>
-                            <option value="">estômago</option>
-                            <option value="">colo do útero</option>
+                            <option value="pele não melanoma">pele não melanoma</option>
+                            <option value="mama feminina">mama feminina</option>
+                            <option value="próstata">próstata</option>
+                            <option value="cólon e reto">cólon e reto</option>
+                            <option value="pulmão">pulmão</option>
+                            <option value="estômago">estômago</option>
+                            <option value="colo do útero">colo do útero</option>
                         </select>
                         <input type="date" class="form-input" placeholder="Data de Nascimento..." id="input_data_nasc">
                     </div>
@@ -173,150 +173,190 @@
         var emailVar = input_email.value;
         var senhaVar = input_senha.value;
 
-        if(tipoUsuario == 'paciente'){
-            var dataNascVar = input_data_nasc.value;
-            var tipoCancerVar = select_tipo_cancer.value; 
+        if(nomeVar != '' &&
+            emailVar != '' &&
+            senhaVar != '' 
+        ){
+            if(senhaVar >= 8 && 
+            /[0-9]/.test(senhaVar) && 
+            emailVar.indexOf('@') > -1 && 
+            emailVar.indexOf('.com') > -1 && 
+            /[A-Z]/.test(senhaVar) &&
+            /[a-z]/.test(senhaVar) &&
+            /[!@#$%^&*(),.?":{}|<>]/.test(senhaVar)){
 
-            fetch("/usuarios/cadastrarPaciente", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                // crie um atributo que recebe o valor recuperado aqui
-                // Agora vá para o arquivo routes/usuario.js
-                nomeServer: nomeVar,
-                emailServer: emailVar,
-                senhaServer: senhaVar,
-                dataNascServer: dataNascVar,
-                tipoCancerServer: tipoCancerVar
-            }),
-            })
-            .then(function (resposta) {
-                console.log("resposta: ", resposta);
+                if(tipoUsuario == 'paciente'){
+                    var dataNascVar = input_data_nasc.value;
+                    var tipoCancerVar = select_tipo_cancer.value; 
 
-                if (resposta.ok) {
+                    if(dataNascVar != '' && tipoCancerVar != ''){
 
-                    alert(`Cadastro realizado com sucesso!`);
+                        fetch("/usuarios/cadastrarPaciente", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            // crie um atributo que recebe o valor recuperado aqui
+                            // Agora vá para o arquivo routes/usuario.js
+                            nomeServer: nomeVar,
+                            emailServer: emailVar,
+                            senhaServer: senhaVar,
+                            dataNascServer: dataNascVar,
+                            tipoCancerServer: tipoCancerVar
+                        }),
+                        })
+                        .then(function (resposta) {
+                            console.log("resposta: ", resposta);
 
-                setTimeout(() => {
-                    trocarForm('login');
-                }, "20");
+                            if (resposta.ok) {
 
-                } else {
-                throw "Houve um erro ao tentar realizar o cadastro!";
+                                alert(`Cadastro realizado com sucesso!`);
+
+                            setTimeout(() => {
+                                trocarForm('login');
+                            }, "20");
+
+                            } else {
+                            throw "Houve um erro ao tentar realizar o cadastro!";
+                            }
+                        })
+                        .catch(function (resposta) {
+                            console.log(`#ERRO: ${resposta}`);
+                        });
+
+                        return false;
+
+                    }else{
+                        alert('todos os campos devem ser preenchidos!');
+                    }
+
+
+                }else{
+                    var parentescoVar = select_parentesco.value;
+                    var codigoPacienteVar = input_codigo_paciente.value;
+
+                    if(parentescoVar != '' && codigoPacienteVar != ''){
+
+                        fetch("/usuarios/cadastrarFamiliar", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            // crie um atributo que recebe o valor recuperado aqui
+                            // Agora vá para o arquivo routes/usuario.js
+                            nomeServer: nomeVar,
+                            emailServer: emailVar,
+                            senhaServer: senhaVar,
+                            parentescoServer: parentescoVar,
+                            codigoPacienteServer: codigoPacienteVar
+                        }),
+                        })
+                        .then(function (resposta) {
+                            console.log("resposta: ", resposta);
+
+                            if (resposta.ok) {
+
+                                alert(`Cadastro realizado com sucesso!`);
+
+                            setTimeout(() => {
+                                trocarForm('login');
+                            }, "20");
+
+                            } else {
+                            throw "Houve um erro ao tentar realizar o cadastro!";
+                            }
+                        })
+                        .catch(function (resposta) {
+                            console.log(`#ERRO: ${resposta}`);
+                        });
+
+                        return false;
+
+                    }else{
+                        alert('todos os campos devem ser prenchidos!');
+                    }
+
                 }
-            })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-            });
 
-            return false;
-
+            }else{
+                alert('email deve conter @ e .com e senha deve ser maior que 8 caracters e ser forte!');
+            }
         }else{
-            var parentescoVar = select_parentesco.value;
-            var codigoPacienteVar = input_codigo_paciente.value;
-
-            fetch("/usuarios/cadastrarFamiliar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                // crie um atributo que recebe o valor recuperado aqui
-                // Agora vá para o arquivo routes/usuario.js
-                nomeServer: nomeVar,
-                emailServer: emailVar,
-                senhaServer: senhaVar,
-                parentescoServer: parentescoVar,
-                codigoPacienteServer: codigoPacienteVar
-            }),
-            })
-            .then(function (resposta) {
-                console.log("resposta: ", resposta);
-
-                if (resposta.ok) {
-
-                    alert(`Cadastro realizado com sucesso!`);
-
-                setTimeout(() => {
-                    trocarForm('login');
-                }, "20");
-
-                } else {
-                throw "Houve um erro ao tentar realizar o cadastro!";
-                }
-            })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-            });
-
-            return false;
+            alert('todos os camos devem ser preenchidos');
         }
+
+       
     }
 
     function entrar(){
         var emailVar = input_email.value;
         var senhaVar = input_senha.value;
 
-        
-        console.log("FORM LOGIN: ", emailVar);
-        console.log("FORM SENHA: ", senhaVar);
+        if(emailVar != '' && senhaVar != ''){
 
-        fetch("/usuarios/autenticar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                emailServer: emailVar,
-                senhaServer: senhaVar
+            console.log("FORM LOGIN: ", emailVar);
+            console.log("FORM SENHA: ", senhaVar);
+
+            fetch("/usuarios/autenticar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    emailServer: emailVar,
+                    senhaServer: senhaVar
+                })
+            }).then(function (resposta) {
+                console.log("ESTOU NO THEN DO entrar()!")
+
+                if (resposta.ok) {
+                    console.log(resposta);
+
+                    resposta.json().then(json => {
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+                        
+                        if(json.parentesco == undefined){
+                            sessionStorage.EMAIL_USUARIO = json.email;
+                            sessionStorage.NOME_USUARIO = json.nome;
+                            sessionStorage.ID_PACIENTE = json.id;
+                            sessionStorage.TIPO_CANCER = json.tipoCancer;
+                            sessionStorage.DATANASC_PACIENTE = json.dataNasc;
+                            sessionStorage.DATAS_CONSULTAS = JSON.stringify(json.datasConsultas)
+                        }else{
+                            sessionStorage.EMAIL_USUARIO = json.email;
+                            sessionStorage.NOME_USUARIO = json.nome;
+                            sessionStorage.ID_FAMILIAR = json.id;
+                            sessionStorage.PARENTESCO = json.parentesco;
+                            sessionStorage.ID_PACIENTE = json.idPaciente;
+                            sessionStorage.DATAS_CONSULTAS = JSON.stringify(json.datasConsultas)
+                        }
+
+                        setTimeout(function () {
+                            window.location = "./dashboard/dash.html";
+                        }, 20); // apenas para exibir o loading
+
+                    });
+
+                } else {
+
+                    console.log("Houve um erro ao tentar realizar o login!");
+
+                    resposta.text().then(texto => {
+                        console.error(texto);
+                    });
+                }
+
+            }).catch(function (erro) {
+                console.log(erro);
             })
-        }).then(function (resposta) {
-            console.log("ESTOU NO THEN DO entrar()!")
 
-            if (resposta.ok) {
-                console.log(resposta);
+            return false;
 
-                resposta.json().then(json => {
-                    console.log(json);
-                    console.log(JSON.stringify(json));
-                    
-                    if(json.parentesco == undefined){
-                        sessionStorage.EMAIL_USUARIO = json.email;
-                        sessionStorage.NOME_USUARIO = json.nome;
-                        sessionStorage.ID_PACIENTE = json.id;
-                        sessionStorage.TIPO_CANCER = json.tipoCancer;
-                        sessionStorage.DATANASC_PACIENTE = json.dataNasc;
-                        sessionStorage.DATAS_CONSULTAS = JSON.stringify(json.datasConsultas)
-                    }else{
-                        sessionStorage.EMAIL_USUARIO = json.email;
-                        sessionStorage.NOME_USUARIO = json.nome;
-                        sessionStorage.ID_FAMILIAR = json.id;
-                        sessionStorage.PARENTESCO = json.parentesco;
-                        sessionStorage.ID_PACIENTE = json.idPaciente;
-                        sessionStorage.DATAS_CONSULTAS = JSON.stringify(json.datasConsultas)
-                    }
-
-                    setTimeout(function () {
-                        window.location = "./dashboard/dash.html";
-                    }, 20); // apenas para exibir o loading
-
-                });
-
-            } else {
-
-                console.log("Houve um erro ao tentar realizar o login!");
-
-                resposta.text().then(texto => {
-                    console.error(texto);
-                });
-            }
-
-        }).catch(function (erro) {
-            console.log(erro);
-        })
-
-        return false;
+        }else{
+            alert('todos os campos devem ser preenchidos!')
+        }
     }
 </script>
