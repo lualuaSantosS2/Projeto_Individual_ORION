@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
 body{
   margin: 0;
   padding: 0;
   box-sizing: 0;
-}
+  font-family: 'Caveat';
+} 
 .navbar {
   width: 100vw;
   display: flex;
@@ -38,16 +40,18 @@ body{
 .navbar .ul li a {
   text-decoration: none !important;
   color: #fff;
-  font-size: 25px;
+  font-size: 40px;
+  font-family: 'Caveat';
 }
 .navbar .ul li button {
   width: 15vw;
   height: 6vh;
   border-radius: 15px;
   color: #fff;
-  font-size: 25px;
+  font-size: 30px;
   background-color: #03153D;
   border: none;
+  font-family: 'Caveat';
 }
 .navbar .ul li button:hover{
   transform: scale(1.1);
@@ -104,9 +108,10 @@ body{
   border: none;
   background-color: #03153D;
   color: #fff;
-  font-size: 25px;
+  font-size: 30px;
   top: 16%;
   position: fixed;
+  font-family: 'Caveat';
 }
 .btn-trocar-form:hover{
   transform: scaleY(1.2);
@@ -126,12 +131,13 @@ body{
 .btn-cadastro-login{
   width: 20vw;
   height: 8vh;
-  font-size: 30px;
+  font-size: 35px;
   color: #fff;
   background-color: #03153D;
   border: none;
   border-radius: 20px;
   box-shadow: 20px 20px 40px rgba(0, 0, 0, 1);
+  font-family: 'Caveat';
 }
 .btn-cadastro-login:hover{
   transform: scale(1.1);

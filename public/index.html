@@ -15,8 +15,6 @@
 
             <li><a href="#quemSomos">Quem somos?</a></li>
 
-            <li><a href="#comoUsar">Como usar?</a></li>
-
             <li><a href="#informe">Informe-se</a></li>
 
             <li><a href="#inspira">Inspiração</a></li>
@@ -71,15 +69,15 @@
        <div id="informe" class="quem-somos info">
         <div class="bloco">
             <div class="section">
-                <img src="imagem/icon-video.png" alt="">
-                <span><b>Vídeos Instrutivos</b><br>
-                    Informe-se e busque conhecimento através de videos de especialistas.</span>
+                <img src="imagem/Sign up-pana.png" alt="">
+                <span><b>Cadastro e Login</b><br>
+                    Faça o cadastro na plataforma e login facilmente pacientes e familiares.</span>
             </div>
 
             <div class="section">
-                <img src="imagem/icon-depoi.png" alt="">
-                <span><b>Depoimentos de Pacientes</b><br>
-                    Outros pacientes que já venceram o câncer partilham as suas experiências  e dão dicas.</span>
+                <img src="imagem/Business merger-bro.png" alt="">
+                <span><b>Vincular conta com a do Paciente</b><br>
+                    No cadastro do familiar através do código Paciente será feito conexão de contas.</span>
                 
             </div>
         </div>
@@ -89,31 +87,65 @@
 
             <img src="imagem/Firefly_em_um_fundo_branco_coloque_uma_borboleta_com_asas_parecendo_uma_galaxia_44597-removebg-preview.png" alt="">
 
-            <button>Começar</button>
+            <button onclick="levarCadastro()">Começar</button>
         </div>
 
         <div class="bloco">
             <div class="section">
-                <img src="imagem/icon-info.png" alt="">
-                <span><b>Notícias e Pesquisas</b><br>
-                    Divulgação de reportagens e pesquisa publicadas por especialistas e estatíscas do INCA.</span>
-            </div>
+                <img src="imagem/Online calendar-rafiki.png" alt="">
+                <span><b>Cadastro de Consultas</b><br>
+                    Cadastre suas consultas e elas serão exibidas na sua dashboard, juntamente ao gráfico
+                    que te ajudará a se planejar durante os meses.</span>
+            </div> 
 
             <div class="section">
-                <img src="imagem/icon-autoexame.png" alt="">
+                <img src="imagem/Remedy-bro.png" alt="">
                 <span><b>Auto-Exames</b><br>
-                    Aqui você encontra dicas e intruções para realização de auto-exames, assim como divulgação de sintomas e alertas.</span>
+                    Aqui você pode ver tomas as medicações que devem ser tomadas e os horários basta cadastra-lás na dashboard.</span>
             </div>
         </div>
     </div>
     
     <div id="inspira" class="quem-somos info">
-        
+        <div class="carrosel">
+            <div class="container-carrosel">
+                <div class="imagens">
+                    <img src="imagem/foto-vo.jpeg" alt="" class="imgInicial">
+                    <img src="imagem/foto-vo2.jpg" alt="">
+                    <img src="imagem/foto-vo3.jpg" alt="">
+                    <img src="imagem/foto-vo4.jpg" alt="">
+                </div>
+                <div class="posicoes">
+                    <button onclick="posicao(0)"></button>
+                    <button onclick="posicao(1)"></button>
+                    <button onclick="posicao(2)"></button>
+                    <button onclick="posicao(3)"></button>
+                </div>
+
+                <button id="anterior" onclick="anterior()"> &lt; </button>
+                <button id="proximo" onclick="proximo()"> &gt; </button>
+            </div>
+        </div>
+
+        <div class="carrosel">
+            <h1>Ovidio Ferraira da Cruz filho</h1>
+            <span>O meu avô  me inspirou a fazer este site, pois
+                ele também foi um paciente de câncer, infelizmente
+                 ele faleceu em março de 2024, e este site  e suas 
+                 funcionalidade são inspirados em situações que passei
+                  ao seu  lado.
+                Isso afeta também muito os familiares que convivem com 
+                paciente assim como eu que morei toda a minha vida ao lado dele,
+                 e esse site é uma homenagem e uma forma de tentar ajudar outras
+                  pessoas para que não passem pelo mesmo!</span>
+        </div>
     </div>
 
     <div id="contato" class="quem-somos info">
         <div class="carrosel">
-            <div class="card b"></div>
+            <div class="card b">
+                <script src="https://portal.hipporello.net/default/embed.js?formId=9b95970c030e44f0b4192ba2608f1e6c"></script>
+            </div>
         </div>
 
         <div class="carrosel">
@@ -125,7 +157,13 @@
         </div>
     </div>
 
+    <script src="js/carrosel.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
+<script>
+    function levarCadastro(){
+        window.location = 'cadastro_login.html';
+    }
+</script>
