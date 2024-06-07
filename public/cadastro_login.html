@@ -177,7 +177,7 @@
             emailVar != '' &&
             senhaVar != '' 
         ){
-            if(senhaVar >= 8 && 
+            if(senhaVar.length >= 8 && 
             /[0-9]/.test(senhaVar) && 
             emailVar.indexOf('@') > -1 && 
             emailVar.indexOf('.com') > -1 && 
